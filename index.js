@@ -1,11 +1,35 @@
 const app = require('express')()
 const port = 8090
 const swaggerUi = require('swagger-ui-express')
-const swaggerDocument = require('./docs/swagger.json');
+const yamljs = require('yamljs');
+const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
+const services = [ 
+{id: 1, name: "Pedicure with gel polish", price: 45}, 
+{id: 2, name: "Manicure with gel polish", price: 35}, 
+{id: 3, name: "Classic manicure", price: 25, description: "Massage, nail polish"},
+{id: 4, name: "Classic pedicure", price: 40, description: "Massage, nail polish"},
+{id: 5, name: "Application of gel nails", price: 55},
+{id: 6, name: "Gel nails care", price: 50},
+{id: 7, name: "French Manicure", price: 30},
+{id: 8, name: "Removal of gel polish", price: 6},
+{id: 9, name: "Medical pedicure", price: 50}
+  
+]
 app.get('/services', (req, res) => {
-  res.send(["Pedicure with gel polish", "Manicure with gel polish", "Classic manicure"])
+  res.send(services)
 })
+app.get('/services/:id', (req, res) => {
+
+  if (typeof services[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Service not found"});
+  }
+
+  res.send(services[req.params.id -1]);
+  // const service = services.filter( s => (s.id == req.params.id))[0];
+
+  // res.send(service);
+});
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 

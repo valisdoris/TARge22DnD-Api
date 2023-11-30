@@ -1,0 +1,82 @@
+openapi: 3.0.2
+info:
+    title: TARge22Dnd-Api
+    version: 1.0.0
+    description: '### This is swagger api'
+paths:
+    /services:
+        get:
+            tags:
+                - services
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                List of services:
+                                    value:
+                                        - Pedicure with gel polish
+                                        - Manicure with gel polish
+                                        - Classic manicure
+                    description: Returns a list of services
+            summary: get a list of all services from api
+            description: Returns a list of all services in API
+    '/services/{id}':
+        get:
+            tags:
+                - details
+            parameters:
+                -
+                    name: id
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: string
+                            examples:
+                                Full details of a given service:
+                                    value: "{id: 1, name: \"Pedicure with gel polish\", price: 45}, \r\n{id: 2, name: \"Manicure with gel polish\", price: 35}, \r\n{id: 3, name: \"Classic manicure\", price: 25, description: \"Massage, nail polish\"},\r\n{id: 4, name: \"Classic pedicure\", price: 40, description: \"Massage, nail polish\"},\r\n{id: 5, name: \"Application of gel nails\", price: 55},\r\n{id: 6, name: \"Gel nails care\", price: 50},\r\n{id: 7, name: \"French Manicure\", price: 30},\r\n{id: 8, name: \"Removal of gel polish\", price: 6},\r\n{id: 9, name: \"Medical pedicure\", price: 50}"
+                    description: Returns full details of a given id service
+                '404':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/error'
+                            examples:
+                                'Service /w+ was not found ':
+                                    value: Service \\w+ was not found in services array
+                    description: Service was not found in services array
+            operationId: id
+            summary: Get full details of a service
+            description: Returns full details of a given id service
+        parameters:
+            -
+                examples:
+                    Id of a service:
+                        value: '66'
+                name: id
+                description: Id of a service
+                schema:
+                    type: integer
+                in: path
+                required: true
+components:
+    schemas:
+        error:
+            title: Root Type for error
+            description: ''
+            type: object
+            properties:
+                error:
+                    type: string
+            example:
+                error: Error message.
