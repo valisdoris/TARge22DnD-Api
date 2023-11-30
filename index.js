@@ -5,6 +5,7 @@ const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
 const services = [ 
+  
 {id: 1, name: "Pedicure with gel polish", price: 45}, 
 {id: 2, name: "Manicure with gel polish", price: 35}, 
 {id: 3, name: "Classic manicure", price: 25, description: "Massage, nail polish"},
