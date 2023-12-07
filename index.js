@@ -1,11 +1,14 @@
-const app = require('express')()
+const express = require('express')
+const app = express()
 const port = 8090
 const swaggerUi = require('swagger-ui-express')
 const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
+app.use(express.json())
+
 const services = [ 
-  
+
 {id: 1, name: "Pedicure with gel polish", price: 45}, 
 {id: 2, name: "Manicure with gel polish", price: 35}, 
 {id: 3, name: "Classic manicure", price: 25, description: "Massage, nail polish"},
@@ -32,8 +35,31 @@ app.get('/services/:id', (req, res) => {
   // res.send(service);
 });
 
+app.post('/services', (req, res) => {
+  if (!req.body.name ||!req.body.price) {
+    return res.status(400).send({error:"One or all params are missing."})
+  }
+  let service = {
+    id: services.length + 1,
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description
+  }
+  
+  services.push(service)
+
+  res.status(201)
+      .location(`${getBaseUrl(req)}/services/${service.length}`)
+      .send(service)
+})
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.listen(port, () => {
   console.log(`Api up at: http://localhost:${port}`)
 })
+
+function getBaseUrl(req) {
+  return req.connection && req.connection.encrypted
+  ? 'https' : 'http' + `://${req.headers.host}`
+}
