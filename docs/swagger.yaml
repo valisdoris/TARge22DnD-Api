@@ -91,6 +91,32 @@ paths:
       operationId: id
       summary: Get full details of a service
       description: Returns full details of a given id service
+    delete:
+      tags:
+        - delete
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/delete-service"
+              examples:
+                delete-service:
+                  value:
+                    id: "1"
+          description: Service has been deleted
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+              examples:
+                error:
+                  value:
+                    error: some text
+          description: Servie has not been found
+      summary: Delete service
+      description: Service is to be able to delete
     parameters:
       - examples:
           Id of a service:
@@ -128,3 +154,15 @@ components:
       example:
         name: manicure
         price: 25
+    delete-service:
+      title: Root Type for delete-service
+      description: ""
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+          example: '{"id": 1}'
+      example:
+        id: 1

@@ -53,6 +53,16 @@ app.post('/services', (req, res) => {
       .send(service)
 })
 
+app.delete('/services/:id', (req, res) => {
+  if (typeof services[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Service not found"})
+  }
+
+  services.splice(req.params.id - 1, 1)
+
+  res.status(204).send({error:"No content"})
+})
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.listen(port, () => {
@@ -63,3 +73,4 @@ function getBaseUrl(req) {
   return req.connection && req.connection.encrypted
   ? 'https' : 'http' + `://${req.headers.host}`
 }
+
