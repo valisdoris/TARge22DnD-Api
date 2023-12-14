@@ -1,3 +1,5 @@
+// require("dotenv").config()
+// const mariadb = require("mariadb")
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -7,8 +9,17 @@ const swaggerUi = require('swagger-ui-express')
 const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
+// const pool = mariadb.createPool({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_NAME,
+//   connectionLimit: 5
+// });
+
 app.use(cors())
 app.use(express.json())
+
 
 const services = [ 
 
@@ -23,6 +34,10 @@ const services = [
 {id: 9, name: "Medical pedicure", price: 50}
   
 ]
+
+
+
+
 app.get('/services', (req, res) => {
   res.send(services)
 })
