@@ -1,5 +1,4 @@
-// require("dotenv").config()
-// const mariadb = require("mariadb")
+require("dotenv").config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -9,18 +8,11 @@ const swaggerUi = require('swagger-ui-express')
 const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
-// const pool = mariadb.createPool({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASS,
-//   database: process.env.DB_NAME,
-//   connectionLimit: 5
-// });
 
 app.use(cors())
 app.use(express.json())
 
-
+require("./routes/app_routes")(app)
 const services = [ 
 
 {id: 1, name: "Pedicure with gel polish", price: 45}, 
@@ -37,10 +29,12 @@ const services = [
 
 
 
-
+app.get("/errors", async (req, res) => {
+  res.statusCode(404).send({"error": "something went wrong"})
+})
 app.get('/services', (req, res) => {
   res.send(services)
-})
+});
 app.get('/services/:id', (req, res) => {
 
   if (typeof services[req.params.id -1] === 'undefined') {
@@ -83,7 +77,7 @@ app.delete('/services/:id', (req, res) => {
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Api up at: http://localhost:${port}`)
 })
 
