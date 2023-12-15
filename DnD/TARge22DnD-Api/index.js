@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -7,9 +8,11 @@ const swaggerUi = require('swagger-ui-express')
 const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
+
 app.use(cors())
 app.use(express.json())
 
+require("./routes/app_routes")(app)
 const services = [ 
 
 {id: 1, name: "Pedicure with gel polish", price: 45}, 
@@ -23,9 +26,15 @@ const services = [
 {id: 9, name: "Medical pedicure", price: 50}
   
 ]
+
+
+
+app.get("/errors", async (req, res) => {
+  res.statusCode(404).send({"error": "something went wrong"})
+})
 app.get('/services', (req, res) => {
   res.send(services)
-})
+});
 app.get('/services/:id', (req, res) => {
 
   if (typeof services[req.params.id -1] === 'undefined') {
@@ -68,7 +77,7 @@ app.delete('/services/:id', (req, res) => {
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Api up at: http://localhost:${port}`)
 })
 
