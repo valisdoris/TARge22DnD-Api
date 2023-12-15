@@ -8,6 +8,10 @@ exports.getAll = async (req,res) => {
   res.send(services)
 }
 
+exports.getById = async (req, res) => {
+  const services = await Service.findByPk(req.params.id)
+  res.send(services)
+
 // exports.getAll = async (req,res) => {
 //   let connection
 //   try {
@@ -20,3 +24,4 @@ exports.getAll = async (req,res) => {
 //     if (connection) return connection.end()
 //   }
 // }
+}
