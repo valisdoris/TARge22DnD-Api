@@ -39,7 +39,8 @@
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" @click="chooseService">Choose</button>
         </div>
       </div>
     </div>
@@ -54,19 +55,19 @@
   <script src="rest-client.js">
     
     </script>
+    
+To add a "Choose" button next to the "Close" button in your modal footer, you can modify the HTML within the modal-footer section. Here's the updated code:
 
-<!-- <div id="app">{{ message }}</div> <script>
-  const { createApp, ref } = Vue
+html
+Copy code
+<!-- ... (other HTML code) ... -->
 
-  createApp({
-    setup() {
-      const message = ref('Hello vue!')
-      return {
-        message
-      }
-    }
-  }).mount('#app')
-</script> -->
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-primary" @click="chooseService">Choose</button>
+</div>
+
+
   
 </body>
 </html>

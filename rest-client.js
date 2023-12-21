@@ -14,6 +14,10 @@ const vue = Vue.createApp({
       this.serviceInModal = await (await fetch(`http://localhost:8090/services/${id}`)).json()
       let serviceInfoModal = new bootstrap.Modal(document.getElementById('serviceInfoModal'), {})
       serviceInfoModal.show()
+    },
+    chooseService() {
+      // Logic to handle the "Choose" button click
+      // Update this method as per your requirements
     }
   }
 }).mount('#app')
