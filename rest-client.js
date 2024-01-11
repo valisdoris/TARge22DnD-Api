@@ -16,8 +16,18 @@ const vue = Vue.createApp({
       serviceInfoModal.show()
     },
     chooseService() {
-      // Logic to handle the "Choose" button click
-      // Update this method as per your requirements
+      const selectedService = {
+        id: 1,
+        name: 'Selected Service',
+        price: 100,
+        description: 'Service description',
+      };
+  
+      // Update the route and navigate to the ServiceDetails component
+      this.$router.push({
+        path: '/service-details',
+        query: { serviceId: selectedService.id },
+      });
     }
   }
 }).mount('#app')

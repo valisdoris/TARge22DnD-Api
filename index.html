@@ -40,7 +40,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success" @click="chooseService">Choose</button>
+          <router-link to="/service-details" class="btn btn-success">Choose</router-link>
+
         </div>
       </div>
     </div>
@@ -56,17 +57,6 @@
     
     </script>
     
-To add a "Choose" button next to the "Close" button in your modal footer, you can modify the HTML within the modal-footer section. Here's the updated code:
-
-html
-Copy code
-<!-- ... (other HTML code) ... -->
-
-<div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-primary" @click="chooseService">Choose</button>
-</div>
-
 
   
 </body>

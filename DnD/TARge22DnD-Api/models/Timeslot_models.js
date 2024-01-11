@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true
     },
     times: {
-      type: Sequelize.ENUM("9:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00", "19:30"),
+      type: Sequelize.SET("9:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00", "19:30"),
       allowNull: true
     }
   })
