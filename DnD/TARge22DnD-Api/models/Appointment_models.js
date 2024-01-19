@@ -1,4 +1,4 @@
-module.exports = (sequelize, Sequelize, Service, Client, Timeslot) => {
+module.exports = (sequelize, Sequelize, Service, Timeslot) => {
   const Appointment = sequelize.define("appointment", {
     id: {
       type: Sequelize.INTEGER,
@@ -13,27 +13,35 @@ module.exports = (sequelize, Sequelize, Service, Client, Timeslot) => {
       }
       
     },
-    clientId: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: Client,
-        key: "id",
-      }
-    },
+    // clientId: {
+    //   type: Sequelize.INTEGER,
+    //   references: {
+    //     model: Client,
+    //     key: "id",
+    //   }
+    // },
     timeslotId: {
       type: Sequelize.INTEGER,
       references: {
         model: Timeslot,
         key: "id",
       }
+
     }
   })
 
-  Service.belongsToMany(Client, {through: Appointment})
-  Client.belongsToMany(Timeslot, {through: Appointment})
-  Timeslot.belongsToMany(Service, {through: Appointment})
-  // Timeslot.belongsToMany(Client, {through: Appointment})
-  // Client.belongsToMany(Service, {through: Appointment})
-  // Service.belongsToMany(Timeslot, {through: Appointment})
-  return Appointment
+  
+
+Service.belongsToMany(Timeslot, { through: Appointment });
+Timeslot.belongsToMany(Service, { through: Appointment });
+
+
+Service.hasMany(Appointment);
+Appointment.belongsTo(Service);
+
+Timeslot.hasMany(Appointment);
+Appointment.belongsTo(Timeslot);
+
+return Appointment
+
 }
