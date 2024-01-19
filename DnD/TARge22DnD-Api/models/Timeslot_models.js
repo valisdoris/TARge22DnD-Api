@@ -1,4 +1,5 @@
-module.exports = (sequelize, Sequelize) => {
+const { Sequelize } = require('sequelize');
+module.exports = (sequelize) => {
   const Timeslot = sequelize.define("timeslot", {
     id: {
       type: Sequelize.INTEGER,
@@ -10,8 +11,9 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true
     },
     times: {
-      type: Sequelize.SET("9:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00", "19:30"),
-      allowNull: true
+      type: Sequelize.ENUM,
+      allowNull: true,
+      values: ["9:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"]
     }
   })
 

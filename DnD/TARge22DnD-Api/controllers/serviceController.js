@@ -1,11 +1,20 @@
 // require("dotenv").config()
-
 const {db} = require("../db");
 const Service = db.services
 
+getBaseUrl = (request) => {
+  return (
+    (request.connection  && request.connection.encryption ? "https" : "http") +
+    `://${request.headers.host}`
+  )
+} 
+
 exports.getAll = async (req,res) => {
-  const services = await Service.findAll({attributes:["id", "name", "price", "description"],
-});
+  //const services = await  db.sequelize.query('SELECT * FROM services', {type: db.sequalize.QueryTypes.SELECT}
+  
+  
+  const services = await Service.findAll({attributes:["id", "name", "price", "description"]})
+
   res.send(services)
 }
 
@@ -71,9 +80,3 @@ if (result === 0){
   .json(service)
 }
 
-getBaseUrl = (request) => {
-  return (
-    (request.connection  && request.connection.encryption ? "https" : "http") +
-    `://${request.headers.host}`
-  )
-}

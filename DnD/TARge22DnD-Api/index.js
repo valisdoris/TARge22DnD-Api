@@ -8,7 +8,6 @@ const swaggerUi = require('swagger-ui-express')
 const yamljs = require('yamljs');
 const swaggerDocument = yamljs.load('./docs/swagger.yaml');
 
-
 app.use(cors())
 app.use(express.json())
 
@@ -25,6 +24,10 @@ const services = [
 {id: 8, name: "Removal of gel polish", price: 6},
 {id: 9, name: "Medical pedicure", price: 50}
   
+]
+
+const timeslot = [
+  {id: 1, date: "12.01.2024", times: ["9:00",  "10:30", "12:00"]}
 ]
 
 
@@ -75,6 +78,46 @@ app.delete('/services/:id', (req, res) => {
   res.status(204).send({error:"No content"})
 })
 
+app.get('/timeslot', (req, res) => {
+  res.send(timeslot)
+});
+
+app.get('/timeslot/:id', (req, res) => {
+
+  if (typeof timeslot[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Timeslot not found"});
+  }
+
+  res.send(timeslot[req.params.id -1]);
+});
+
+app.post('/timeslot', (req, res) => {
+  if (!req.body.date ||!req.body.times) {
+    return res.status(400).send({error:"One or all params are missing."})
+  }
+  let timeslot = {
+    id: timeslot.length + 1,
+    date: req.body.date,
+    times: req.body.times
+  }
+  
+  timeslots.push(timeslot)
+
+  res.status(201)
+      .location(`${getBaseUrl(req)}/timeslot/${timeslot.length}`)
+      .send(timeslot)
+})
+
+app.delete('/timeslot/:id', (req, res) => {
+  if (typeof timeslots[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Timeslot not found"})
+  }
+
+  timeslots.splice(req.params.id - 1, 1)
+
+  res.status(204).send({error:"No content"})
+})
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.listen(port, async () => {
@@ -85,4 +128,23 @@ function getBaseUrl(req) {
   return req.connection && req.connection.encrypted
   ? 'https' : 'http' + `://${req.headers.host}`
 }
+
+// router.get('/:id/timeslots', async (req, res) => {
+//   try {
+//     const serviceId = req.params.id;
+
+//     // Fetch service details
+//     const service = await Service.findByPk(serviceId);
+
+//     // Fetch associated timeslots
+//     const timeslots = await Timeslot.findAll({ where: { serviceId } });
+
+//     res.json({ service, timeslots });
+//   } catch (error) {
+//     console.error('Error fetching service and timeslots:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
+
+// module.exports = router;
 
