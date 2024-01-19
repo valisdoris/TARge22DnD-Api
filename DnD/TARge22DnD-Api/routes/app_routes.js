@@ -1,4 +1,5 @@
 const serviceController = require('../controllers/serviceController');
+// const serviceController = require('../controllers/timeslotController');
 
 module.exports = (app) => {
   app.route("/services")
@@ -10,5 +11,7 @@ module.exports = (app) => {
   .put(serviceController.updateById)
   .delete(serviceController.deleteById);
 
-  
+//   app.route("/timeslot")
+//   .get(timeslotController.getAll)
+
 }

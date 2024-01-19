@@ -23,7 +23,7 @@
 export default {
   data() {
     return {
-      service: {} // Assuming you pass the selected service as a prop
+      serviceName: 'Service Details Page',
     };
   },
 };
