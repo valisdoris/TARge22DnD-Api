@@ -6,6 +6,14 @@ const vue = Vue.createApp({
       services : [],
       timeslotInModal: {name: null},
       timeslots:[],
+      selectedTime: '',
+      appointmentForm: {
+        date: '',
+        time: null,
+        name: '',
+        email: '',
+        selectedTime: null,
+      },
       appointments : []
 
     }
@@ -21,6 +29,16 @@ const vue = Vue.createApp({
       this.serviceInModal = await (await fetch(`http://localhost:8090/services/${id}`)).json()
       let serviceInfoModal = new bootstrap.Modal(document.getElementById('serviceInfoModal'), {})
       serviceInfoModal.show()
+    },
+
+    selectTime(time) {
+      this.selectedTime = time;
+    },
+
+    setAppointmentTime() {
+      this.appointmentForm.time = this.selectedTime;
+      $('#appointmentModal').modal('show');
+
     },
 
     getTimeslot: async function (timeslotId) {

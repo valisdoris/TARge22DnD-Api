@@ -9,18 +9,20 @@ getBaseUrl = (request) => {
   )
 }
 
-exports.getAll = async (req,res) => {
-  const timeslot = await Timeslot.findAll({attributes:["id", "date", "times"],
-});
-  res.send(timeslot)
+exports.getAll = async (req, res) => {
+  try {
+    const timeslots = await Timeslot.findAll({ attributes: ["id", "date", "times"] });
+    console.log('Timeslots from database:', timeslots);
+    res.send(timeslots);
+  } catch (error) {
+    console.error('Error fetching timeslots:', error);
+    res.status(500).send({ error: "Something went wrong" });
+  }
 }
-
 
 exports.getById = async (req, res) => {
   const timeslots = await Timeslot.findByPk(req.params.id)
   res.send(timeslots)
-
-
 }
 
 exports.createNew = async (req, res) => {
@@ -33,7 +35,7 @@ exports.createNew = async (req, res) => {
       console.log(error)
       res.status(400).send({"error":error.errors.map((item)=> item.message)})
     } else {
-    console.log("TimeslotsCreate: ", error)
+    console.log("TimeslotCreate: ", error)
     res.status(500).send({"error":"Something has gone wrong"})
   }
   return

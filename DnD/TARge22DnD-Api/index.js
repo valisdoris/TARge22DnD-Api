@@ -27,14 +27,16 @@ const services = [
 ]
 
 const timeslot = [
-  {id: 1, date: "12.01.2024", times: ["9:00",  "10:30", "12:00"]}
+  {id: 1, date: "2024-01-01", times: ["9:00","10:30","12:00","13:30","15:00","16:30","18:00","19:30"]},
+  {id: 2, date: "2024-01-02", times: ["10:30","13:30","16:30","19:30"]},
+  // {id: 3, date: "2024-01-03", times: ["9:00","12:00","15:00","18:00"]},
+  
 ]
 
 const appointment = [
   {
     id: 1, serviceId: 1, timeslotId: 1
   } ]
-
 
 app.get("/errors", async (req, res) => {
   res.statusCode(404).send({"error": "something went wrong"})
@@ -49,9 +51,6 @@ app.get('/services/:id', (req, res) => {
   }
 
   res.send(services[req.params.id -1]);
-  // const service = services.filter( s => (s.id == req.params.id))[0];
-
-  // res.send(service);
 });
 
 app.post('/services', (req, res) => {
@@ -87,45 +86,44 @@ app.get('/timeslot', (req, res) => {
 });
 
 app.get('/timeslot/:id', (req, res) => {
-
-  if (typeof timeslot[req.params.id -1] === 'undefined') {
-    return res.status(404).send({error:"Timeslot not found"});
+  if (typeof timeslot[req.params.id - 1] === 'undefined') {
+    return res.status(404).send({ error: "Timeslot not found" });
   }
 
-  res.send(timeslot[req.params.id -1]);
+  res.send(timeslot[req.params.id - 1]);
 });
 
 app.post('/timeslot', (req, res) => {
-  if (!req.body.date ||!req.body.times) {
-    return res.status(400).send({error:"One or all params are missing."})
+  if (!req.body.date || !req.body.times) {
+    return res.status(400).send({ error: "One or all params are missing." });
   }
-  let timeslot = {
+  let newTimeslot = {
     id: timeslot.length + 1,
     date: req.body.date,
     times: req.body.times
-  }
-  
-  timeslots.push(timeslot)
+  };
+
+  timeslot.push(newTimeslot);
 
   res.status(201)
-      .location(`${getBaseUrl(req)}/timeslot/${timeslot.length}`)
-      .send(timeslot)
-})
+    .location(`${getBaseUrl(req)}/timeslot/${newTimeslot.length}`)
+    .send(newTimeslot);
+});
 
 app.delete('/timeslot/:id', (req, res) => {
-  if (typeof timeslots[req.params.id -1] === 'undefined') {
-    return res.status(404).send({error:"Timeslot not found"})
+  if (typeof timeslot[req.params.id - 1] === 'undefined') {
+    return res.status(404).send({ error: "Timeslot not found" });
   }
 
-  timeslots.splice(req.params.id - 1, 1)
+  timeslot.splice(req.params.id - 1, 1);
 
-  res.status(204).send({error:"No content"})
-})
+  res.status(204).send({ error: "No content" });
+});
 
-app.get('/appointments', (req, res) => {
+app.get('/appointment', (req, res) => {
   res.send(appointment)
 });
-app.get('/appointments/:id', (req, res) => {
+app.get('/appointment/:id', (req, res) => {
 
   if (typeof appointment[req.params.id -1] === 'undefined') {
     return res.status(404).send({error:"Appointment not found"});
@@ -134,7 +132,7 @@ app.get('/appointments/:id', (req, res) => {
 
 });
 
-app.post('/appointments', (req, res) => {
+app.post('/appointment', (req, res) => {
   if (!req.body.name ||!req.body.price) {
     return res.status(400).send({error:"One or all params are missing."})
   }
@@ -148,7 +146,7 @@ app.post('/appointments', (req, res) => {
   appointment.push(appointment)
 
   res.status(201)
-      .location(`${getBaseUrl(req)}/appointments/${appointment.length}`)
+      .location(`${getBaseUrl(req)}/appointment/${appointment.length}`)
       .send(appointment)
 })
 
@@ -161,7 +159,6 @@ app.delete('/appointment/:id', (req, res) => {
 
   res.status(204).send({error:"No content"})
 })
-
 
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))

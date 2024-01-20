@@ -26,11 +26,11 @@ module.exports = (sequelize, Sequelize, Service, Timeslot) => {
   // Service.belongsToMany(Timeslot, { through: Appointment, foreignKey: 'serviceId' });
   // Timeslot.belongsToMany(Service, { through: Appointment, foreignKey: 'timeslotId' });
 
-  Service.hasMany(Appointment);
-  Appointment.belongsTo(Service);
+  // Service.hasMany(Appointment);
+  // Appointment.belongsTo(Service);
 
-  Timeslot.hasMany(Appointment);
-  Appointment.belongsTo(Timeslot);
+  // Timeslot.hasMany(Appointment);
+  // Appointment.belongsTo(Timeslot);
 
   return Appointment
 }
