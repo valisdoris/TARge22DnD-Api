@@ -21,8 +21,6 @@ exports.getAll = async (req,res) => {
 exports.getById = async (req, res) => {
   const services = await Service.findByPk(req.params.id)
   res.send(services)
-
-
 }
 
 exports.createNew = async (req, res) => {

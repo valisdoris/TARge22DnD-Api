@@ -19,7 +19,7 @@ db.services = require("./models/Service_model")(sequelize, Sequelize);
 
 //db.clients = require("./models/Client_models")(sequelize, Sequelize);
 db.timeslots = require("./models/Timeslot_models")(sequelize, Sequelize);
-db.appointments = require("./models/Appointment_models")(sequelize, Sequelize, db.services, db.timeslots);
+db.appointment = require("./models/Appointment_models")(sequelize, Sequelize, db.services, db.timeslots);
 
 async function Sync() {
   await sequelize.sync({alter:true})

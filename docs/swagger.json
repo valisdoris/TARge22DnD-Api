@@ -1,43 +1,813 @@
 {
-  "openapi": "3.0.2",
-  "info": {
-      "title": "TARge22Dnd-Api",
-      "version": "1.0.0",
-      "description": "### This is swagger api"
-  },
-  "paths": {
-      "/services": {
-          "get": {
-              "tags": [
-                  "services"
-              ],
-              "responses": {
-                  "200": {
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "type": "string"
-                                  }
-                              },
-                              "examples": {
-                                  "List of services": {
-                                      "value": [
-                                          "Pedicure with gel polish",
-                                          "Manicure with gel polish",
-                                          "Classic manicure"
-                                      ]
-                                  }
-                              }
-                          }
-                      },
-                      "description": "Returns a list of services"
-                  }
-              },
-              "summary": "get a list of all services from api",
-              "description": "Returns a list of all services in API"
-          }
-      }
-  }
+    "openapi": "3.0.2",
+    "info": {
+        "title": "TARge22Dnd-Api",
+        "version": "1.0.0",
+        "description": "### This is swagger api"
+    },
+    "paths": {
+        "/services": {
+            "get": {
+                "tags": [
+                    "services"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "List of services": {
+                                        "value": [
+                                            "Pedicure with gel polish",
+                                            "Manicure with gel polish",
+                                            "Classic manicure"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns a list of services"
+                    }
+                },
+                "summary": "get a list of all services from api",
+                "description": "Returns a list of all services in API"
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new service to be created",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/error"
+                            },
+                            "examples": {
+                                "error": {
+                                    "value": {
+                                        "error": "some text"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "new-service"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/new-service"
+                                },
+                                "examples": {
+                                    "Example of service": {
+                                        "value": {
+                                            "name": "some text",
+                                            "price": 30.36
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Services has been created into the array/database"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                }
+                            }
+                        },
+                        "description": "One or all params are missing"
+                    }
+                },
+                "summary": "Creates a service",
+                "description": "creates a new service"
+            }
+        },
+        "/services/{id}": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of a given service": {
+                                        "value": "{id: 1, name: \"Pedicure with gel polish\", price: 45}, \r\n{id: 2, name: \"Manicure with gel polish\", price: 35}, \r\n{id: 3, name: \"Classic manicure\", price: 25, description: \"Massage, nail polish\"},\r\n{id: 4, name: \"Classic pedicure\", price: 40, description: \"Massage, nail polish\"},\r\n{id: 5, name: \"Application of gel nails\", price: 55},\r\n{id: 6, name: \"Gel nails care\", price: 50},\r\n{id: 7, name: \"French Manicure\", price: 30},\r\n{id: 8, name: \"Removal of gel polish\", price: 6},\r\n{id: 9, name: \"Medical pedicure\", price: 50}"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns full details of a given id service"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Service /w+ was not found ": {
+                                        "value": "Service \\\\w+ was not found in services array"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Service was not found in services array"
+                    }
+                },
+                "operationId": "id",
+                "summary": "Get full details of a service",
+                "description": "Returns full details of a given id service"
+            },
+            "put": {
+                "requestBody": {},
+                "tags": [
+                    "update-sevices"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/update-services"
+                                },
+                                "examples": {
+                                    "update-services": {
+                                        "value": {
+                                            "name": "some text",
+                                            "price": 27.44
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Services was updated"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Services was not found": {
+                                        "value": {
+                                            "error": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Services was not found"
+                    }
+                },
+                "summary": "Modify the details of a services"
+            },
+            "delete": {
+                "tags": [
+                    "delete"
+                ],
+                "responses": {
+                    "204": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/delete-service"
+                                },
+                                "examples": {
+                                    "delete-service": {
+                                        "value": {
+                                            "id": "1"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Service has been deleted"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Servie has not been found"
+                    }
+                },
+                "summary": "Delete service",
+                "description": "Service is to be able to delete"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Id of a service": {
+                            "value": "66"
+                        }
+                    },
+                    "name": "id",
+                    "description": "Id of a service",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/appointments": {
+            "get": {
+                "tags": [
+                    "appointments"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {}
+                        },
+                        "description": "Returns a list of appointments"
+                    }
+                },
+                "summary": "get a list of appointments from api",
+                "description": "Returns a list of available appointments in API"
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new appoitnment to be created",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/error"
+                            },
+                            "examples": {
+                                "error": {
+                                    "value": {
+                                        "error": "some text"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "new-appointment"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/new-apointment"
+                                },
+                                "examples": {
+                                    "new-appointment": {
+                                        "value": {
+                                            "serviceId": 87,
+                                            "timeslotId": 50
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Appointment has been created into the array/database"
+                    }
+                },
+                "description": "Creates new appointment"
+            }
+        },
+        "/appointments/{id}": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns full details of a given id appointment"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Appointment was not found": {
+                                        "value": "Appointment was not found in array"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Appointment was not found in appointment array"
+                    }
+                },
+                "summary": "Get full details of a appointment",
+                "description": "Returns full details of a given id appointment"
+            },
+            "delete": {
+                "tags": [
+                    "delete"
+                ],
+                "responses": {
+                    "204": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/delete-appointment"
+                                },
+                                "examples": {
+                                    "delete-appointment": {
+                                        "value": {
+                                            "id": "1"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Appointment has been deleted"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Appointment has not been found"
+                    }
+                },
+                "summary": "Delete appointment",
+                "description": "Appointment is to be able to delete"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Id of a appointment": {
+                            "value": "2"
+                        }
+                    },
+                    "name": "id",
+                    "description": "Id of a appointment",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/timeslot": {
+            "get": {
+                "tags": [
+                    "timeslot"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "List of timeslot": {
+                                        "value": [
+                                            "2024-01-02",
+                                            "2024-02-23"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns a list of timeslot"
+                    }
+                },
+                "summary": "get a list of all timeslots from api",
+                "description": "returns a list of all timeslots in API"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/new-timeslot"
+                            },
+                            "examples": {
+                                "Example of timeslot": {
+                                    "value": {
+                                        "date": "2018-01-17",
+                                        "times": "some text"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "new-timeslot"
+                ],
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/new-timeslot"
+                                },
+                                "examples": {
+                                    "Example of new timeslot": {
+                                        "value": {
+                                            "date": "2018-01-17",
+                                            "times": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Timeslot has been created into the array/database"
+                    }
+                },
+                "summary": "Creates a timeslot",
+                "description": "creates a new timeslot"
+            }
+        },
+        "/timeslot/{id}": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of a timeslot": {
+                                        "value": "{id: 1, date: 2024-02-05, times: 08:00}, \n{id: 2, name: 2024-02-26, times: 11:00}, "
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns full details of a fiven id timeslot"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Timeslot was not found": {
+                                        "value": "Timeslot was not found"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Timeslot was not found in services array"
+                    }
+                },
+                "summary": "Get full details of a times and dates",
+                "description": "Return full details of a given id of timeslot"
+            },
+            "put": {
+                "tags": [
+                    "update-timeslot"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/update-timeslot"
+                                },
+                                "examples": {
+                                    "update-timeslot": {
+                                        "value": {
+                                            "date": "2018-01-17",
+                                            "times": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Times was updated"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Timeslot was not found"
+                    }
+                },
+                "summary": "Modify the details of a timeslot"
+            },
+            "delete": {
+                "tags": [
+                    "delete"
+                ],
+                "responses": {
+                    "204": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/delete-timeslot"
+                                },
+                                "examples": {
+                                    "delete-timeslot": {
+                                        "value": {
+                                            "id": 2
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Timeslot has been deleted"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "some text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Timeslot has not been found"
+                    }
+                },
+                "summary": "Delete timeslot",
+                "description": "Timeslot is to be able to delete"
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "Id of timeslot": {
+                            "value": "16"
+                        }
+                    },
+                    "name": "id",
+                    "description": "Id of timeslot",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        }
+    },
+    "components": {
+        "schemas": {
+            "error": {
+                "title": "Root Type for error",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "error": "Error message."
+                }
+            },
+            "new-service": {
+                "title": "Root Type for new-service",
+                "description": "",
+                "required": [
+                    "price",
+                    "name"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "format": "float",
+                        "type": "number"
+                    }
+                },
+                "example": {
+                    "name": "manicure",
+                    "price": 25
+                }
+            },
+            "delete-service": {
+                "title": "Root Type for delete-service",
+                "description": "",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "{\"id\": 1}"
+                    }
+                },
+                "example": {
+                    "id": 1
+                }
+            },
+            "delete-appointment": {
+                "title": "Root Type for delete-appointment",
+                "description": "",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "{\n    \"id\": 1\n}",
+                        "type": "string",
+                        "example": "{\"id\": 1}"
+                    }
+                },
+                "example": {
+                    "id": 1
+                }
+            },
+            "new-timeslot": {
+                "title": "Root Type for new-timeslot",
+                "description": "",
+                "required": [
+                    "date"
+                ],
+                "type": "object",
+                "properties": {
+                    "date": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "times": {
+                        "enum": [],
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "date": "2024-02-03",
+                    "times": "9:00"
+                }
+            },
+            "new-apointment": {
+                "description": "",
+                "required": [
+                    "serviceId",
+                    "timeslotId"
+                ],
+                "type": "object",
+                "properties": {
+                    "serviceId": {
+                        "description": "",
+                        "type": "integer"
+                    },
+                    "timeslotId": {
+                        "description": "",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "serviceId": 69,
+                    "timeslotId": 94
+                }
+            },
+            "delete-timeslot": {
+                "description": "",
+                "required": [
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "{\"id\": 2}",
+                        "type": "string",
+                        "example": "{\"id\": 2}"
+                    }
+                },
+                "example": {
+                    "id": 2
+                }
+            },
+            "update-services": {
+                "description": "",
+                "required": [
+                    "name",
+                    "price"
+                ],
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "",
+                        "type": "string"
+                    },
+                    "price": {
+                        "format": "float",
+                        "description": "",
+                        "type": "number"
+                    }
+                },
+                "example": {
+                    "name": "manicure",
+                    "price": 56.14
+                }
+            },
+            "update-timeslot": {
+                "description": "",
+                "required": [
+                    "date",
+                    "times"
+                ],
+                "type": "object",
+                "properties": {
+                    "date": {
+                        "format": "date",
+                        "description": "",
+                        "type": "string"
+                    },
+                    "times": {
+                        "description": "",
+                        "enum": [],
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
 }

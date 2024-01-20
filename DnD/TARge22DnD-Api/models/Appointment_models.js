@@ -13,13 +13,6 @@ module.exports = (sequelize, Sequelize, Service, Timeslot) => {
       }
       
     },
-    // clientId: {
-    //   type: Sequelize.INTEGER,
-    //   references: {
-    //     model: Client,
-    //     key: "id",
-    //   }
-    // },
     timeslotId: {
       type: Sequelize.INTEGER,
       references: {
@@ -30,18 +23,14 @@ module.exports = (sequelize, Sequelize, Service, Timeslot) => {
     }
   })
 
-  
+  // Service.belongsToMany(Timeslot, { through: Appointment, foreignKey: 'serviceId' });
+  // Timeslot.belongsToMany(Service, { through: Appointment, foreignKey: 'timeslotId' });
 
-Service.belongsToMany(Timeslot, { through: Appointment });
-Timeslot.belongsToMany(Service, { through: Appointment });
+  Service.hasMany(Appointment);
+  Appointment.belongsTo(Service);
 
+  Timeslot.hasMany(Appointment);
+  Appointment.belongsTo(Timeslot);
 
-Service.hasMany(Appointment);
-Appointment.belongsTo(Service);
-
-Timeslot.hasMany(Appointment);
-Appointment.belongsTo(Timeslot);
-
-return Appointment
-
+  return Appointment
 }

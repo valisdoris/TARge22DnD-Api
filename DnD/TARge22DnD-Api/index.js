@@ -30,6 +30,10 @@ const timeslot = [
   {id: 1, date: "12.01.2024", times: ["9:00",  "10:30", "12:00"]}
 ]
 
+const appointment = [
+  {
+    id: 1, serviceId: 1, timeslotId: 1
+  } ]
 
 
 app.get("/errors", async (req, res) => {
@@ -118,6 +122,48 @@ app.delete('/timeslot/:id', (req, res) => {
   res.status(204).send({error:"No content"})
 })
 
+app.get('/appointments', (req, res) => {
+  res.send(appointment)
+});
+app.get('/appointments/:id', (req, res) => {
+
+  if (typeof appointment[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Appointment not found"});
+  }
+  res.send(appointment[req.params.id -1]);
+
+});
+
+app.post('/appointments', (req, res) => {
+  if (!req.body.name ||!req.body.price) {
+    return res.status(400).send({error:"One or all params are missing."})
+  }
+  let appointment = {
+    id: appointment.length + 1,
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description
+  }
+  
+  appointment.push(appointment)
+
+  res.status(201)
+      .location(`${getBaseUrl(req)}/appointments/${appointment.length}`)
+      .send(appointment)
+})
+
+app.delete('/appointment/:id', (req, res) => {
+  if (typeof appointment[req.params.id -1] === 'undefined') {
+    return res.status(404).send({error:"Appointment not found"})
+  }
+
+  appointment.splice(req.params.id - 1, 1)
+
+  res.status(204).send({error:"No content"})
+})
+
+
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.listen(port, async () => {
@@ -129,22 +175,4 @@ function getBaseUrl(req) {
   ? 'https' : 'http' + `://${req.headers.host}`
 }
 
-// router.get('/:id/timeslots', async (req, res) => {
-//   try {
-//     const serviceId = req.params.id;
-
-//     // Fetch service details
-//     const service = await Service.findByPk(serviceId);
-
-//     // Fetch associated timeslots
-//     const timeslots = await Timeslot.findAll({ where: { serviceId } });
-
-//     res.json({ service, timeslots });
-//   } catch (error) {
-//     console.error('Error fetching service and timeslots:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-// module.exports = router;
 
