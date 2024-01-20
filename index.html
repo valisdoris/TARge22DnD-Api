@@ -31,14 +31,14 @@
   
 <p style="font-family: cursive; text-align: center; font-size: 50px; font-weight: 300;">Literally nailed it!</p>
 
-<table id="timeslotTable" class="table table-striped table-bordered">
+<table id="timeslotTable" class="table table-bordered" style="width: auto;">
   <tr>
     <th>Date</th>
     <th>Time</th>
   </tr>
   <tr v-for="info in timeslots">
-    <td @click="getTimeslot(info.id)">{{info.date}}</td>
-    <td v-for="time in info.times">{{ time }}</td>
+    <td @click="getTimeslot(info.id)" style="background-color: #f9f9f9; width: 150px;">{{info.date}}</td>
+    <td v-for="time in info.times" style="background-color: beige; width: 100px;">{{ time }}</td> 
     <!-- <td><button type="button" class="btn btn btn-outline-secondary p-2 mt-5 mx-5" data-bs-target="#appointmentInfoModal" v-on:click="getAppointment(data.id)">Choose</button></td> -->
   </tr>
 </table>
