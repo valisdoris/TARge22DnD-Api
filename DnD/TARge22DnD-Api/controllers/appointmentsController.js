@@ -1,17 +1,41 @@
 const {db} = require('../db')
 const Appointment = db.appointment
-const Service = db.services
-const Timeslot = db.timeslots
-const QueryTypes = db.Sequelize.QueryTypes
+const Timeslot = db.timeslot
 
-exports.getAll = async (res) => {
-  const Appointment = await Appointment.findAll({attributes:["id", "timeslotId", "serviceId", "Status"]
-});
+exports.createNewAppointment = async (req, res) => {
+  try {
+
+      // Create a new booking
+      const appointment = await Appointment.create({
+          servicesID: req.body.servicesId,
+          resDate: req.body.resDate,
+          resTime: req.body.resTime,
+          name: req.body.name,
+          email: req.body.email,
+          Status: req.body.Status,
+
+      });
+      res.status(201).json({ success: true, appointmentId: appointment.Id });
+
+    } catch (error) {
+      console.error(error);
+        if (error instanceof db.Sequelize.ValidationError) {
+            console.log(error);
+            res.status(400).send({ "error": error.errors.map((item) => item.message) });
+        } else {
+            console.log("Appointment created: ", error);
+            res.status(500).send({ error: "Something has gone wrong" });
+        }
+    }
+};
+exports.getAll = async (_, res) => {
+  const appointment = await Appointment.findAll({attributes:["Id", "servicesId", "resDate", "resTime", "name", "email","Status"]
+})
   res.send(appointment);
 }
 
 exports.getById = async (req, res) => {
-  const Appointment = await Appointment.findByPk(req.params.id)
+  const appointment = await Appointment.findByPk(req.params.id)
   res.send(appointment);
 }
 
@@ -69,3 +93,10 @@ if (result === 0){
   res.status(200).location(`${getBaseUrl(req)}/appointment/${appointment.id}`)
   .json(appointment)
 }
+
+getBaseUrl = (request) => {
+  return (
+    (request.connection  && request.connection.encryption ? "https" : "http") +
+    `://${request.headers.host}`
+  )
+} 
