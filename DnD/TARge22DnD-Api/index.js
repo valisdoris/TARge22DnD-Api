@@ -28,15 +28,18 @@ const services = [
 
 const timeslot = [
   {id: 1, date: "2024-01-01", times: ["9:00","10:30","12:00","13:30","15:00","16:30","18:00","19:30"]},
-  {id: 2, date: "2024-01-02", times: ["10:30","13:30","16:30","19:30"]},
-  // {id: 3, date: "2024-01-03", times: ["9:00","12:00","15:00","18:00"]},
+  //{id: 2, date: "2024-01-02", times: ["10:30","13:30","16:30","19:30"]},
+  //{id: 3, date: "2024-01-03", times: ["9:00","12:00","15:00","18:00"]},
   
 ]
 
 const appointment = [
   {
     id: 1, serviceId: 1, timeslotId: 1
-  } ]
+  } ,
+  {
+    id: 2, serviceId: 2, timeslotId: 2
+  }]
 
 app.get("/errors", async (req, res) => {
   res.statusCode(404).send({"error": "something went wrong"})
@@ -81,8 +84,18 @@ app.delete('/services/:id', (req, res) => {
   res.status(204).send({error:"No content"})
 })
 
-app.get('/timeslot', (req, res) => {
-  res.send(timeslot)
+// app.get('/timeslot', (req, res) => {
+//   res.send(timeslot)
+// });
+
+app.get('/timeslot', async (req, res) => {
+  try {
+    const timeslots = await db.timeslot.findAll();
+    res.send(timeslots);
+  } catch (error) {
+    console.error('Error fetching timeslots:', error);
+    res.status(500).send({ error: 'Internal Server Error' });
+  }
 });
 
 app.get('/timeslot/:id', (req, res) => {
@@ -136,14 +149,17 @@ app.post('/appointment', (req, res) => {
   if (!req.body.name ||!req.body.price) {
     return res.status(400).send({error:"One or all params are missing."})
   }
-  let appointment = {
+  const newAppointment = {
     id: appointment.length + 1,
     name: req.body.name,
-    price: req.body.price,
-    description: req.body.description
-  }
+    servicesID: req.body.servicesID,
+    resDate: req.body.resDate,
+    resTime: req.body.resTime,
+    email: req.body.email,
+    Status: req.body.Status,
+  };
   
-  appointment.push(appointment)
+  appointment.push(newAppointment)
 
   res.status(201)
       .location(`${getBaseUrl(req)}/appointment/${appointment.length}`)
