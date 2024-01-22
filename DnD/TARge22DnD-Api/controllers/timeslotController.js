@@ -25,6 +25,25 @@ exports.getById = async (req, res) => {
   res.send(timeslots)
 }
 
+exports.updateById = async (req, res) => {
+  let result
+  delete req.body.id
+  try {
+    result = await Timeslot.update(req.body,{where: {id: req.params.id}})
+  } catch (error) {
+    console.log("TimeslotUpdate: ", error)
+    res.status(500).send({"error":"Something has gone wrong"})
+    return
+}
+if (result === 0){
+  res.status(404).send({error:"Timeslot not found"})
+  return
+}
+  const timeslot = await Timeslot.findByPk(req.params.id)
+  res.status(200).location(`${getBaseUrl(req)}/timeslot/${timeslot.id}`)
+  .json(timeslot)
+}
+
 exports.createNew = async (req, res) => {
   let timeslot
 
@@ -45,24 +64,7 @@ exports.createNew = async (req, res) => {
   res.send(timeslot)
 }
 
-exports.updateById = async (req, res) => {
-  let result
-  delete req.body.id
-  try {
-    result = await Timeslot.update(req.body,{where: {id: req.params.id}})
-  } catch (error) {
-    console.log("TimeslotUpdate: ", error)
-    res.status(500).send({"error":"Something has gone wrong"})
-    return
-}
-if (result === 0){
-  res.status(404).send({error:"Timeslot not found"})
-  return
-}
-  const timeslot = await Timeslot.findByPk(req.params.id)
-  res.status(200).location(`${getBaseUrl(req)}/timeslot/${timeslot.id}`)
-  .json(timeslot)
-}
+
 
 exports.deleteById = async (req, res) => {
   let result
