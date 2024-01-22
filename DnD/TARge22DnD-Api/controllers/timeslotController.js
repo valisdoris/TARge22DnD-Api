@@ -68,6 +68,7 @@ exports.createNew = async (req, res) => {
 
 exports.deleteById = async (req, res) => {
   let result
+
   try {
     result = await Timeslot.destroy({where: {id: req.params.id}})
   } catch (error) {
@@ -75,6 +76,7 @@ exports.deleteById = async (req, res) => {
     res.status(500).send({"error":"Something has gone wrong"})
   return
 }
+
 if (result === 0){
   res.status(404).send({error:"Timeslot not found"})
   return
