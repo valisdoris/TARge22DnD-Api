@@ -1,6 +1,6 @@
 const serviceController = require('../controllers/serviceController');
 const timeslotController = require('../controllers/timeslotController');
-const appointmentsController = require('../controllers/AppointmentsController');
+const appointmentsController = require('../controllers/appointmentsController');
 
 
 // const serviceController = require('../controllers/timeslotController');
@@ -16,11 +16,11 @@ module.exports = (app) => {
   .delete(serviceController.deleteById);
 
 
-  app.route("/timeslots")
+  app.route("/timeslot")
       .get(timeslotController.getAll)
       .post(timeslotController.createNew);
 
-  app.route("/timeslots/:id")
+  app.route("/timeslot/:id")
   .get(timeslotController.getById)
   .put(timeslotController.updateById)
   .delete(timeslotController.deleteById);
