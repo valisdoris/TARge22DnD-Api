@@ -61,7 +61,9 @@ if (result === 0){
 
 exports.updateById = async (req, res) => {
   let result
+
   delete req.body.id
+  
   try {
     result = await Service.update(req.body,{where: {id: req.params.id}})
   } catch (error) {
