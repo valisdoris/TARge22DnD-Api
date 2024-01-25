@@ -35,10 +35,10 @@ const timeslot = [
 
 const appointment = [
   {
-    id: 1, serviceId: 1, timeslotId: 1
+    id: 1, servicesId: 1, timeslotId: 1
   } ,
   {
-    id: 2, serviceId: 2, timeslotId: 2
+    id: 2, servicesId: 2, timeslotId: 2
   }]
 
 app.get("/errors", async (req, res) => {
@@ -133,10 +133,10 @@ app.delete('/timeslot/:id', (req, res) => {
   res.status(204).send({ error: "No content" });
 });
 
-app.get('/appointment', (req, res) => {
+app.get('/appointments', (req, res) => {
   res.send(appointment)
 });
-app.get('/appointment/:id', (req, res) => {
+app.get('/appointments/:id', (req, res) => {
 
   if (typeof appointment[req.params.id -1] === 'undefined') {
     return res.status(404).send({error:"Appointment not found"});
@@ -145,25 +145,24 @@ app.get('/appointment/:id', (req, res) => {
 
 });
 
-app.post('/appointment', (req, res) => {
-  if (!req.body.name ||!req.body.price) {
+app.post('/appointments', (req, res) => {
+  if (!req.params.ServicesId ||!req.params.resDate || !req.params.resTime || !req.params.name || !req.params.email) {
     return res.status(400).send({error:"One or all params are missing."})
   }
   const newAppointment = {
     id: appointment.length + 1,
-    name: req.body.name,
-    servicesID: req.body.servicesID,
+    servicesId: req.body.servicesId,
     resDate: req.body.resDate,
     resTime: req.body.resTime,
-    email: req.body.email,
-    Status: req.body.Status,
+    name: req.body.name,
+    email: req.body.email
   };
   
   appointment.push(newAppointment)
 
   res.status(201)
       .location(`${getBaseUrl(req)}/appointment/${appointment.length}`)
-      .send(appointment)
+      .send(newAppointment)
 })
 
 app.delete('/appointment/:id', (req, res) => {

@@ -7,7 +7,7 @@ import ServiceDetails from './components/servicedetails.vue';
 
 const routes = [
   { path: '/', component: App },
-  { path: '/servicedetails/:serviceId', name: 'servicedetails', component: ServiceDetails, props: true },
+  //{ path: '/servicedetails/:serviceId', name: 'servicedetails', component: ServiceDetails, props: true },
 ];
 
 const router = createRouter({

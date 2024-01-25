@@ -1,9 +1,7 @@
 const serviceController = require('../controllers/serviceController');
 const timeslotController = require('../controllers/timeslotController');
-const appointmentsController = require('../controllers/appointmentsController');
+const appointmentsController = require('../controllers/appointmentController');
 
-
-// const serviceController = require('../controllers/timeslotController');
 
 module.exports = (app) => {
   app.route("/services")
@@ -28,7 +26,7 @@ module.exports = (app) => {
 
   app.route("/appointments")
   .get(appointmentsController.getAll)
-  .post(appointmentsController.createNew);
+  .post(appointmentsController.createNewAppointment);
 
   app.route("/appointments/:id")
   .get(appointmentsController.getById)

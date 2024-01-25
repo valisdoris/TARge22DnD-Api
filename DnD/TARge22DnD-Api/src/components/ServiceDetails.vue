@@ -35,7 +35,7 @@ export default {
       // Use this.serviceId to fetch service details from your data source
       // For now, simulate fetching data
       this.service = {
-        id: this.serviceId,
+        id: this.servicesId,
         name: 'Sample Service',
         price: 20.0,
         description: 'Sample service description',

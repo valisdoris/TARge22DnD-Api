@@ -1,17 +1,17 @@
-const vue = Vue.createApp({
+const app = Vue.createApp({
   data() {
     
     return {
       serviceInModal: {name: null},
       services : [],
-      timeslotInModal: {id: null, date: null, times: null},
-      timeslot:[],
+      timeslotInModal: {date: null},
+      //timeslot:[],
       timeslotsAlias: [],
       selectedTime: '',
-      appointmentInModal: { serviceName: null },
+      appointmentInModal: { serviceName: null, resDate: '', resTime: null, name: '', email: ''},
       appointmentForm: {
-        date: '',
-        time: null,
+        resDate: '',
+        resTime: null,
         name: '',
         email: '',
         servicesId: null,
@@ -38,48 +38,80 @@ const vue = Vue.createApp({
       this.selectedTime = time;
     },
 
-    showModal: async function (id) {
+    showModal: async function (timeslotId) {
       console.log('Fetching timeslot data...');
-      const response = await fetch(`http://localhost:8090/timeslot/${id}`);
+      const response = await fetch(`http://localhost:8090/timeslot/${timeslotId}`);
       const data = await response.json();
       console.log('Timeslot data received:', data);
   
       this.timeslotInModal = data;
-  
+      
+      console.log('Before showing modal');
+      this.$nextTick(() => {
       let timeslotInfoModal = new bootstrap.Modal(document.getElementById('timeslotInfoModal'), {});
       timeslotInfoModal.show();
-      // this.appointmentForm.time = this.selectedTime;
-      // $('#appointmentModal').modal('show');
+      });
+      console.log('After showing modal');
+      
 
     },
 
-    getTimeslot: async function (timeslotId) {
-      this.timeslotInModal = await (await fetch(`http://localhost:8090/timeslots/${timeslotId}`)).json()
-      
-      
-      let timeslotInfoModal = new bootstrap.Modal(document.getElementById('timeslotInfoModal'), {});
-      timeslotInfoModal.show();
-      
-    },
-    
-    getAppointment: async function (serviceId) {
+    getAppointment: async function (servicesId) {
       try {
         // Fetch service details
-        const response = await fetch(`http://localhost:8090/services/${serviceId}`);
+        const response = await fetch(`http://localhost:8090/services/${servicesId}`);
         const serviceData = await response.json();
     
         this.serviceInModal = serviceData
 
-        this.appointmentInModal.serviceId = this.serviceInModal.id;
+        this.appointmentInModal.servicesId = this.serviceInModal.id;
         this.appointmentInModal.serviceName = this.serviceInModal.name;
-        
+        this.appointmentInModal.resDate = this.appointmentInModal.resDate;
+      this.appointmentInModal.resTime = this.appointmentInModal.resTime;       
     
             
         // Show the appointmentModal
         const appointmentModal = new bootstrap.Modal(document.getElementById('appointmentModal'), {});
         appointmentModal.show();
-    
+
+        const appointmentForm = document.getElementById('appointmentForm');
+        
+    appointmentForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      
+      this.appointmentInModal.resDate = this.appointmentInModal.resDate;
+      this.appointmentInModal.resTime = this.appointmentInModal.resTime;  
+      formData.append('servicesId', this.appointmentInModal.servicesId);
+// formData.append('resDate', this.appointmentForm.resDate);
+// formData.append('resTime', this.appointmentForm.resTime);
+// formData.append('name', this.appointmentForm.name);
+// formData.append('email', this.appointmentForm.email);
+this.appointmentForm.resDate = formData.get('resDate');
+this.appointmentForm.resTime = formData.get('resTime');
+this.appointmentForm.name = formData.get('name');
+this.appointmentForm.email = formData.get('email');
+      const response = await fetch(`http://localhost:8090/appointments`, {
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            servicesId: this.appointmentInModal.servicesId,
+            resDate: this.appointmentForm.resDate,
+            resTime: this.appointmentForm.resTime,
+            name: this.appointmentForm.name,
+            email: this.appointmentForm.email,
+          }),
+      });
+
+      const responseData = await response.json();
+console.log(responseData);
+
+        console.log(response);
         console.log('Appointment data:', this.appointmentInModal);
+      })
       } catch (error) {
         console.error('Error fetching appointment data:', error);
       }
@@ -89,11 +121,11 @@ const vue = Vue.createApp({
       console.log('Submitting appointment form...');
       try {
         const formData = {
-          ServicesId: this.serviceInModal.Id,
-          Name: this.appointmentForm.name,
-          Email: this.appointmentForm.email,
-          Date: this.appointmentForm.date,
-          Time: this.appointmentForm.time,
+          servicesId: this.serviceInModal.id,
+          resDate: this.appointmentForm.resDate,
+          resTime: this.appointmentForm.resTime,
+          name: this.appointmentForm.name,
+          email: this.appointmentForm.email,
         }
 
         const response = await fetch('http://localhost:8090/appointments', {
@@ -139,4 +171,5 @@ const vue = Vue.createApp({
         
     },
 }
-}).mount('#app')
+});
+const vue = app.mount('#app');
